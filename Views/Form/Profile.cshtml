@@ -1,0 +1,171 @@
+﻿@model website.Models.Users
+@await Html.PartialAsync("_header")
+
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<div class="profile-wrapper">
+
+    <div class="profile-page">
+
+        <h2 class="profile-title">My Profile</h2>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
+
+        <form asp-action="Profile" method="post">
+
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Age" class="form-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DateOfBirth" class="form-label"></label>
+                <input asp-for="DateOfBirth" class="form-control" type="date" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Gender" class="form-label"></label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PostalAddress" class="form-label"></label>
+                <textarea asp-for="PostalAddress" class="form-control"></textarea>
+                <span asp-validation-for="PostalAddress" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">New Password (optional)</label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <button type="submit" class="profile-btn">
+                Update Profile
+            </button>
+
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+@await Html.PartialAsync("_footer")
+<style>
+    /* ==============================
+           PROFILE PAGE – FINAL
+           ============================== */
+
+    .profile-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #8B5E3C; /* rich brown color */
+        padding: 40px 15px;
+    }
+
+    .profile-page {
+        width: 100%;
+        max-width: 720px;
+        padding: 32px;
+        background: linear-gradient(135deg, #f4e1d2, #d9bfa1, #e9d4bc);
+        border-radius: 16px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    .profile-title {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 700;
+        color: #4a2f1a;
+        margin-bottom: 30px;
+    }
+
+    /* Inputs */
+    .profile-page .form-control,
+    .profile-page .form-select,
+    .profile-page textarea {
+        height: 46px;
+        border-radius: 10px;
+        border: 1px solid #cbb299;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .profile-page textarea {
+        min-height: 90px;
+        height: auto;
+    }
+
+        /* Focus */
+        .profile-page .form-control:focus,
+        .profile-page .form-select:focus,
+        .profile-page textarea:focus {
+            border-color: #8B5E3C;
+            box-shadow: 0 0 0 0.25rem rgba(139, 94, 60, 0.25);
+        }
+
+    /* Button */
+    /* ===== PROFILE BUTTON COLOR ===== */
+
+    .profile-btn {
+        width: 100%;
+        height: 52px;
+        background-color: #8B5E3C; /* brown */
+        border: none;
+        border-radius: 14px;
+        font-size: 17px;
+        font-weight: 600;
+        color: #ffffff; /* text white */
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .profile-btn:hover {
+            background-color: #D9A066; /* golden on hover */
+            color: #3b2614;
+            box-shadow: 0 8px 20px rgba(217,160,102,0.5);
+        }
+
+		/* Success */
+		.profile-page .alert-success {
+			border-radius: 10px;
+		}
+
+
+</style>

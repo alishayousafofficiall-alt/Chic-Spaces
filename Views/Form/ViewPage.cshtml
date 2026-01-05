@@ -1,0 +1,142 @@
+﻿@await Html.PartialAsync("_header")
+<link rel="stylesheet" href="~/css/new.css" />
+@{
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+@if (Model.Id == 2)
+{
+    <div class="container my-5 contact-banner">
+        <img src="@Url.Content(Model.ImageUrl)" class="full-banner" />
+        <div class="mt-4">
+            <h2>@Model.Title</h2>
+            <p class="fs-5">@Model.Content</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container my-5 page-section text-center">
+
+        <div class="image-area animate-on-load">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="circle-img-wrapper">
+                    <img src="@Url.Content(Model.ImageUrl)" alt="Banner Image" class="circle-img" />
+                    <div class="overlay"></div>
+                </div>
+            }
+        </div>
+
+        <div class="text-area mt-3 animate-on-load">
+            <h2>@Model.Title</h2>
+            <p class="fs-5">@Model.Content</p>
+        </div>
+
+    </div>
+
+}
+
+
+
+<!-- ===================== -->
+<!-- CONTACT SECTION -->
+<!-- ===================== -->
+@if (Model.Id == 2)
+{
+    <div class="container my-5">
+
+        <div class="row mt-5">
+
+            <!-- LEFT SIDE -->
+            <div class="col-lg-6">
+                <!-- Info + Map -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6"><div class="info-card text-center"><h5>Phone</h5><p>207-8767-452</p></div></div>
+                    <div class="col-6"><div class="info-card text-center"><h5>WhatsApp</h5><p>092-123-456-789</p></div></div>
+                    <div class="col-6"><div class="info-card text-center"><h5>Email</h5><p>support@thebookden.com</p></div></div>
+                    <div class="col-6"><div class="info-card text-center"><h5>Our Shop</h5><p>Burewala</p></div></div>
+                </div>
+
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1234567890!2d-122.123456!3d37.123456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb123456789%3A0xabcdef123456789!2sYour+Place!5e0!3m2!1sen!2sus!4v1234567890"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+            </div>
+
+            <!-- RIGHT SIDE: Contact Form -->
+            <div class="col-lg-5">
+                <div class="p-4 bg-white rounded shadow-sm">
+
+                    <h3>Get In Touch</h3>
+
+                    <form asp-action="Contact" method="post">
+                        @if (TempData["ContactSuccess"] != null)
+                        {
+                            <div class="alert alert-success">@TempData["ContactSuccess"]</div>
+                        }
+
+
+                        <input class="form-control mb-3" name="Name" placeholder="Your Name" required />
+                        <input class="form-control mb-3" name="Email" placeholder="Your Email" required type="email" />
+                        <input class="form-control mb-3" name="Subject" placeholder="Subject" />
+                        <textarea class="form-control mb-3" name="Message" rows="5" required></textarea>
+
+                        <button class="btn btn-pink w-100" type="submit">Send Now</button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+<!-- ===================== -->
+<!-- REVIEW FORM -->
+<!-- ===================== -->
+@if (Model.Id == 5)
+{
+    <div class="container my-5 d-flex justify-content-center">
+        <div class="review-box" style="width: 500px;">
+
+            <h3 class="text-center mb-4">Leave a Review</h3>
+
+            <form asp-action="SubmitReview" method="post">
+
+                @if (TempData["ReviewSuccess"] != null)
+                {
+                    <div class="alert alert-success">@TempData["ReviewSuccess"]</div>
+                }
+
+                <input name="Name" class="form-control mb-3" placeholder="Your Name" required />
+
+                <!-- ⭐ STAR RATING SYSTEM -->
+                <div class="star-rating mb-3 text-center">
+
+                    <input type="radio" id="star5" name="Rating" value="5" required />
+                    <label for="star5" title="5 stars">★</label>
+
+                    <input type="radio" id="star4" name="Rating" value="4" />
+                    <label for="star4" title="4 stars">★</label>
+
+                    <input type="radio" id="star3" name="Rating" value="3" />
+                    <label for="star3" title="3 stars">★</label>
+
+                    <input type="radio" id="star2" name="Rating" value="2" />
+                    <label for="star2" title="2 stars">★</label>
+
+                    <input type="radio" id="star1" name="Rating" value="1" />
+                    <label for="star1" title="1 star">★</label>
+
+                </div>
+
+                <textarea name="Message" class="form-control mb-3" placeholder="Your Review" required></textarea>
+
+                <button type="submit" class="btn review-btn w-100">Submit Review</button>
+
+            </form>
+        </div>
+    </div>
+}
+
+
+@await Html.PartialAsync("_footer")

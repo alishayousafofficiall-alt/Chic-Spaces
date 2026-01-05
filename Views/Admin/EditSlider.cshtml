@@ -1,0 +1,24 @@
+﻿
+@await Html.PartialAsync("_header")
+@model website.Models.Slider
+@{
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+<h2>@(Model?.Id > 0 ? "Edit Slider" : "Add Slider")</h2>
+
+<form asp-action="@(Model?.Id > 0 ? "EditSlider" : "AddSlider")" method="post">
+    @if (Model?.Id > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label"></label>
+        <input asp-for="ImageUrl" class="form-control" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Sliders" class="btn btn-secondary">Cancel</a>
+</form>
+@await Html.PartialAsync("_footer")

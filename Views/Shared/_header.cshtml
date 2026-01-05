@@ -1,0 +1,338 @@
+﻿@using System.Security.Claims
+@inject website.Models.WebDbContext _Db
+
+@{
+    var categories = _Db.Categories.ToList();
+    string displayName = "Guest";
+    bool isAdmin = false;
+    int cartCount = 0;
+
+    if (User?.Identity?.IsAuthenticated == true)
+    {
+        var email = User.Identity?.Name;
+        if (!string.IsNullOrEmpty(email))
+        {
+            var currentUser = _Db.Users.FirstOrDefault(u => u.Email == email);
+            if (currentUser != null)
+            {
+                displayName = currentUser.FirstName;
+                isAdmin = currentUser.Role == "Admin";
+                cartCount = _Db.Carts.Count(c => c.UserId == currentUser.Id);
+            }
+        }
+    }
+}
+
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm border-bottom mb-1" style="background-color: #8B5E3C;">
+    <div class="container-fluid">
+
+        <!-- BRAND -->
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-white" asp-controller="form" asp-action="Index">
+            <img src="~/images/Logo.jpg" alt="Chic Spaces" class="brand-logo" />
+            <span>Chic Spaces</span>
+        </a>
+
+        <!-- TOGGLER -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLinks">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- NAV LINKS -->
+        <div class="collapse navbar-collapse" id="navbarLinks">
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                <!-- HOME -->
+                <li class="nav-item mx-1">
+                    <a class="nav-link text-white" asp-controller="Form" asp-action="Index">
+                        <i class="bi bi-house-door"></i> Home
+                    </a>
+                </li>
+
+                <!-- CONTACT -->
+                <li class="nav-item mx-1">
+                    <a class="nav-link text-white" asp-controller="Form" asp-action="ViewPage" asp-route-id="2">
+                        <i class="bi bi-envelope"></i> Contact
+                    </a>
+                </li>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <!-- USER / ADMIN DROPDOWN -->
+                    <li class="nav-item dropdown mx-2">
+                        <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> @displayName
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            @* Admin link *@
+                            @if (isAdmin)
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Admin" asp-action="AdminDashboard">
+                                        <i class="bi bi-speedometer2 me-2"></i> Admin Dashboard
+                                    </a>
+                                </li>
+                            }
+
+                            @* Orders for normal user *@
+                            @if (!isAdmin)
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Form" asp-action="Orders">
+                                        <i class="bi bi-bag-check me-2"></i> My Orders
+                                    </a>
+                                </li>
+                            }
+
+                            <li>
+                                <a class="dropdown-item" asp-controller="Form" asp-action="Profile">
+                                    <i class="bi bi-pencil-square me-2"></i> Update Profile
+                                </a>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <form asp-controller="Form" asp-action="Logout" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                    @* CART ONLY FOR NORMAL USERS *@
+                    @if (!isAdmin)
+                    {
+                        <li class="nav-item mx-2">
+                            <a class="nav-link text-white" asp-controller="Form" asp-action="Cart">
+                                🛒 Cart (<span id="cart-count">@cartCount</span>)
+                            </a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="nav-item mx-1">
+                        <a class="nav-link text-white" asp-controller="form" asp-action="Login">Login</a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a class="nav-link text-white" asp-controller="form" asp-action="Register">Register</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm border-bottom"
+     style="background: linear-gradient(135deg, #f4e1d2, #d9bfa1, #e9d4bc);">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+
+        <!-- LEFT -->
+        <div class="d-flex align-items-center">
+            <button id="themeToggle" class="btn btn-outline-secondary me-2">
+                <i id="themeIcon" class="bi bi-moon"></i>
+            </button>
+
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle fw-semibold" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-grid"></i> Categories
+                    </a>
+
+                    <div class="dropdown-menu p-3 category-dropdown">
+                        <div class="row g-2">
+                            @foreach (var category in categories)
+                            {
+                                <div class="col-4 text-center">
+                                    <a class="dropdown-item"
+                                       asp-controller="Form"
+                                       asp-action="Products"
+                                       asp-route-categoryId="@category.Id">
+                                        <img src="@category.ImageUrl" class="category-img mb-1" />
+                                        <div class="category-name">@category.Name</div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- RIGHT SEARCH -->
+        <form class="d-flex" style="width:300px;"
+              asp-controller="Form"
+              asp-action="SearchProducts"
+              method="get">
+            <input class="form-control me-2" name="query" placeholder="Search products..." required />
+            <button class="btn btn-gradient">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+
+    </div>
+</nav>
+
+
+<script>
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+        document.getElementById("themeIcon").classList.replace("bi-moon", "bi-sun");
+    }
+
+    document.getElementById("themeToggle").onclick = function () {
+        const body = document.body;
+        const icon = document.getElementById("themeIcon");
+
+        body.classList.toggle("dark-mode");
+
+        if (body.classList.contains("dark-mode")) {
+            localStorage.setItem("theme", "dark");
+            icon.classList.replace("bi-moon", "bi-sun");
+        } else {
+            localStorage.setItem("theme", "light");
+            icon.classList.replace("bi-sun", "bi-moon");
+        }
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function addToCart(productId, quantity = 1) {
+        $.ajax({
+            url: '/Form/AddToCart',
+            type: 'POST',
+            data: { productId: productId, quantity: quantity },
+            success: function(response) {
+                if (response.success) {
+                    // Update navbar cart count
+                    $('#navbarCartCount').text(response.cartCount);
+
+                    // Optional: success message
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('Something went wrong!');
+            }
+        });
+    }
+</script>
+
+<style>
+
+
+    /* Brand */
+    .navbar-brand {
+        color: #fff !important;
+        font-size: 1.4rem;
+        letter-spacing: 0.5px;
+    }
+
+        .navbar-brand i {
+            color: #f4e1d2;
+        }
+
+    /* Nav links */
+    .navbar-nav .nav-link {
+        color: #fdf6f0 !important;
+        font-weight: 500;
+        padding: 8px 14px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff !important;
+        }
+
+    /* Dropdown */
+    .dropdown-menu {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        padding: 8px 0;
+    }
+
+    .dropdown-item {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+        transition: background 0.3s, color 0.3s;
+    }
+
+        .dropdown-item:hover {
+            background-color: #f4e1d2;
+            color: #8B5E3C;
+        }
+
+        /* Logout */
+        .dropdown-item.text-danger:hover {
+            background-color: #fbeaea;
+            color: #b30000;
+        }
+
+    /* Cart badge */
+    #cart-count {
+        background-color: #f4e1d2;
+        color: #8B5E3C;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-left: 4px;
+    }
+
+    /* Toggler (mobile) */
+    .navbar-toggler {
+        border-color: rgba(255,255,255,0.6);
+    }
+
+    .navbar-toggler-icon {
+        filter: invert(1);
+    }
+
+    /* Active link */
+    .navbar-nav .nav-link.active {
+        background-color: rgba(255,255,255,0.25);
+    }
+
+  
+
+    /* ===== BRAND LOGO ===== */
+    .brand-logo {
+        width: 42px;
+        height: 42px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        background: #fff;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover .brand-logo {
+        transform: scale(1.08);
+    }
+
+    /* Gradient button for search */
+    .btn-gradient {
+        background: linear-gradient(135deg, #f4e1d2, #d9bfa1, #e9d4bc);
+        color: #8B5E3C; /* Brown text/icon */
+        border: none; /* Remove default border */
+        border-radius: 8px;
+        padding: 6px 14px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+</style>

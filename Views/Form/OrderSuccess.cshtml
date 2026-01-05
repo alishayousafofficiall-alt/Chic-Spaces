@@ -1,0 +1,74 @@
+﻿@await Html.PartialAsync("_header")
+@{
+    ViewData["Title"] = "Order Success";
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+
+<div class="container my-5 text-center">
+    <div class="order-success-card p-5">
+        <h2 class="text-success mb-3">Thank You! Your Order has been Placed</h2>
+        <p class="mb-4">We will process your order and send confirmation to your email.</p>
+        <a asp-controller="form" asp-action="Index" class="btn btn-lg btn-brown">
+            Back to Home
+        </a>
+    </div>
+</div>
+@await Html.PartialAsync("_footer")
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f4e1d2, #d9bfa1, #e9d4bc);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #4b3a2f;
+    }
+
+    /* ====================== ORDER SUCCESS CARD ====================== */
+    .order-success-card {
+        background: #fff5e6;
+        border-radius: 15px;
+        box-shadow: 0 6px 18px rgba(139,94,60,0.15);
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .order-success-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139,94,60,0.25);
+        }
+
+    /* ====================== BUTTON ====================== */
+    .btn-brown {
+        background-color: #8B5E3C;
+        border: 1px solid #8B5E3C;
+        color: #fff;
+        font-weight: 700;
+        padding: 12px 25px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-brown:hover {
+            background-color: #D9A066;
+            color: #4b3a2f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(139,94,60,0.3);
+        }
+
+    /* ====================== HEADINGS ====================== */
+    h2 {
+        color: #4b3a2f;
+        font-size: 1.8rem;
+    }
+
+    p {
+        color: #5b4636;
+        font-size: 1rem;
+    }
+</style>

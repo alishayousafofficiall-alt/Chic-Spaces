@@ -1,0 +1,141 @@
+﻿
+@await Html.PartialAsync("_header")
+@model IEnumerable<website.Models.Category>
+@{
+    ViewBag.Title = "Manage Categories";
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+
+<h2>Categories</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Banner Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(category.ImageUrl))
+                    {
+                        <img src="@category.ImageUrl" style="width:80px;height:80px;object-fit:cover;" />
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(category.BannerImageUrl))
+                    {
+                        <img src="@category.BannerImageUrl" style="width:100px;height:50px;object-fit:cover;" />
+                    }
+                </td>
+                <td>@category.Name</td>
+                <td>@category.Description</td>
+                <td>
+                    <a asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="DeleteCategory" asp-route-id="@category.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Html.PartialAsync("_footer")
+<style>
+    /* ================= MANAGE CATEGORIES ================= */
+
+    /* Page Heading */
+    h2 {
+        color: #D9A066; /* golden brown */
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Table Styling */
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+        table thead {
+            background-color: #5c3a21; /* dark brown header */
+            color: #FFD699; /* golden text */
+            font-weight: 600;
+        }
+
+            table thead th {
+                padding: 12px 15px;
+                text-align: center;
+            }
+
+        table tbody tr {
+            background-color: #8B5E3C; /* lighter brown row */
+            color: #f0e6dc; /* cream text */
+            transition: background-color 0.3s ease;
+        }
+
+            table tbody tr:nth-child(even) {
+                background-color: #7a4e33; /* striped effect */
+            }
+
+            table tbody tr:hover {
+                background-color: #D9A066; /* golden hover */
+                color: #5c3a21; /* dark text on hover */
+            }
+
+        table tbody td {
+            padding: 10px 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    /* Images */
+    img {
+        border-radius: 8px;
+        border: 1px solid #D9A066;
+        object-fit: cover;
+    }
+
+    /* Buttons */
+    .btn-warning {
+        background-color: #D9A066; /* golden brown */
+        color: #5c3a21;
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 0.875rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        border: none;
+    }
+
+        .btn-warning:hover {
+            background-color: #FFD699; /* lighter golden */
+            transform: translateY(-2px);
+        }
+
+    .btn-danger {
+        background-color: #c0392b;
+        color: #fff;
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 0.875rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background-color: #e74c3c;
+            transform: translateY(-2px);
+        }
+
+</style>

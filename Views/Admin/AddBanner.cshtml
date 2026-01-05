@@ -1,0 +1,33 @@
+﻿@await Html.PartialAsync("_header")
+
+@model website.Models.Banner
+@{
+    ViewData["Title"] = "Add Banner";
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+
+<h2>Add Banner</h2>
+
+<form asp-action="AddBanner" method="post">
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label"></label>
+        <input asp-for="ImageUrl" class="form-control" placeholder="Enter Image URL" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Page" class="form-label"></label>
+        <input asp-for="Page" class="form-control" placeholder="Enter Page (e.g., Home, About)" />
+        <span asp-validation-for="Page" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Banner</button>
+    <a asp-action="Banners" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+@await Html.PartialAsync("_footer")

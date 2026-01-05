@@ -1,0 +1,165 @@
+﻿@await Html.PartialAsync("_header")
+@model IEnumerable<website.Models.Product>
+@{
+    ViewBag.Title = "Manage Products";
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+
+}
+
+<h2>Products</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Color</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        <img src="@product.ImageUrl" style="width:80px;height:80px;object-fit:cover;" />
+                    }
+                </td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.Color</td>
+                <td>@product.Price.ToString("C")</td>
+                <td>@product.Stock</td>
+                <td>@product.Category?.Id</td>
+                <td>
+                    <a asp-action="EditProduct" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="DeleteProduct" asp-route-id="@product.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>  
+@await Html.PartialAsync("_footer")
+/* ================= ADMIN PRODUCTS TABLE ================= */
+<style>
+h2 {
+    margin: 30px 0 20px;
+    text-align: center;
+    font-weight: 700;
+    color: #0d3b66;
+}
+
+/* Table container */
+.table {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.table thead tr {
+    background: linear-gradient(135deg, #0d3b66, #0353a4);
+    color: #fff;
+}
+
+.table thead th {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Body */
+.table tbody tr {
+    transition: all 0.2s ease-in-out;
+}
+
+.table tbody tr:hover {
+    background: rgba(13,59,102,0.06);
+    transform: scale(1.012);
+}
+
+/* Cells */
+.table td, .table th {
+    padding: 12px 10px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+/* Description column */
+.table td:nth-child(4) {
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Product image */
+.table img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid #e6e6e6;
+    background: #fafafa;
+}
+
+/* Price */
+.table td:nth-child(6) {
+    font-weight: 700;
+    color: #198754;
+}
+
+/* Stock badge style */
+.table td:nth-child(7) {
+    font-weight: 600;
+}
+
+/* Category */
+.table td:nth-child(8) {
+    font-weight: 600;
+    color: #0d6efd;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 6px;
+    padding: 6px 14px;
+    transition: all 0.25s ease;
+}
+
+/* Edit */
+.btn-warning {
+    background: linear-gradient(135deg, #f9c74f, #f9844a);
+    border: none;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #f9844a, #f3722c);
+    transform: translateY(-1px);
+}
+
+/* Delete */
+.btn-danger {
+    background: linear-gradient(135deg, #e63946, #d62828);
+    border: none;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #d62828, #b5171e);
+    transform: translateY(-1px);
+}
+
+
+</style>

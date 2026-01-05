@@ -1,0 +1,155 @@
+﻿
+@{
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+
+@await Html.PartialAsync("_header")
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container my-5 d-flex justify-content-center">
+    <div class="product-detail-card row g-4 shadow-lg p-4 rounded">
+        <!-- LEFT: IMAGE -->
+        <div class="col-md-6 text-center">
+            <img src="@Model.ImageUrl"
+                 alt="@Model.Name"
+                 class="product-detail-img rounded" />
+        </div>
+
+        <!-- RIGHT: INFO -->
+        <div class="col-md-6 d-flex flex-column justify-content-center">
+            <h2 class="product-name">@Model.Name</h2>
+            <h4 class="product-price">Rs @Model.Price.ToString("N0")</h4>
+
+           
+
+            <p class="product-description">@Model.Description</p>
+
+            <!-- Buttons -->
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <form class="add-to-cart-form d-inline" data-product-id="@Model.Id">
+                    <button type="submit" class="btn btn-warning btn-lg">Add to Cart</button>
+                </form>
+
+                <form asp-controller="Form" asp-action="BuyNow" method="post">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Buy Now
+                    </button>
+                </form>
+
+
+                <a asp-controller="Form"
+                   asp-action="Products"
+                   asp-route-categoryId="@Model.CategoryId"
+                   class="btn btn-secondary btn-lg">
+                    Back to Products
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("_footer")
+<style>
+    /* ===== PRODUCT DETAIL CARD - FURNITURE THEME ===== */
+    .product-detail-card {
+        max-width: 900px;
+        background: #fff5e6; /* warm beige */
+        border-radius: 15px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        padding: 20px;
+    }
+
+        .product-detail-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(139,94,60,0.25); /* warm brown shadow */
+        }
+
+    /* ===== IMAGE ===== */
+    .product-detail-img {
+        width: 100%;
+        max-width: 350px;
+        height: 350px;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
+        border: 2px solid #D9A066; /* subtle accent border */
+    }
+
+        .product-detail-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(139,94,60,0.3);
+            filter: brightness(1.1);
+        }
+
+    /* ===== INFO ===== */
+    .product-name {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #4b3a2f; /* dark warm brown */
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        color: #8B5E3C; /* brown accent */
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .product-color,
+    .product-description {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: #5b4636; /* soft dark brown */
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-lg {
+        min-width: 130px;
+        background: linear-gradient(135deg, #8B5E3C, #D9A066);
+        color: #fff;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-lg:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(139,94,60,0.3);
+            background: linear-gradient(135deg, #D9A066, #8B5E3C);
+            color: #fff;
+        }
+
+</style>
+
+
+
+<script>
+    $(document).ready(function(){
+        $(".add-to-cart-form").submit(function(e){
+            e.preventDefault();
+
+            var productId = $(this).data("product-id");
+
+            $.post("/Form/AddToCart", { productId: productId, quantity: 1 })
+                .done(function(res){
+                    if(res.success){
+                        // Update cart count in navbar
+                        $("#cart-count").text(res.cartCount);
+
+                        // Optional: success toast/message
+                        alert(res.message);
+                    } else {
+                        alert(res.message);
+                    }
+                })
+                .fail(function(){
+                    alert("Something went wrong!");
+                });
+        });
+    });
+</script>

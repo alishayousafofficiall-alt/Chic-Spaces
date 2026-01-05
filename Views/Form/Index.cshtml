@@ -1,0 +1,570 @@
+﻿@model website.Models.ViewModel
+@await Html.PartialAsync("_header")
+<link rel="stylesheet" href="~/css/new.css" />
+
+@{
+    var categories = Model.Categories;
+    var sliders = Model.Sliders;
+    var trendingProducts = Model.TrendingProducts;
+    var newAdditions = Model.NewAdditions;
+    var pages = Model.Pages;
+
+}
+@if (sliders.Any())
+{
+    <div id="homeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            @for (int i = 0; i < sliders.Count; i++)
+            {
+                var slider = sliders[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img src="@Url.Content(slider.ImageUrl)" class="d-block w-100" alt="Slider Image" />
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+}
+else
+{
+    <p>No sliders available</p>
+}
+ 
+
+<!-- ================= CATEGORIES ================= -->
+<h1 class="section-heading">Categories</h1>
+<div class="categories-grid">
+    @if (categories.Count > 0)
+    {
+        foreach (var category in categories)
+        {
+            <a asp-controller="Form" asp-action="Products" asp-route-categoryId="@category.Id" class="category-circle text-decoration-none text-center">
+                <img src="@Url.Content(category.ImageUrl)" alt="@category.Name" class="category-img" />
+                <div class="category-name">@category.Name</div>
+            </a>
+        }
+    }
+    else
+    {
+        <p class="text-center">No categories found.</p>
+    }
+</div>
+
+<h1 class="section-heading">Trending Products</h1>
+<div id="trendingCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+    <div class="carousel-inner">
+        @for (int i = 0; i < trendingProducts.Count; i += 5)
+        {
+            <div class="carousel-item @(i == 0 ? "active" : "")">
+                <div class="d-flex justify-content-between flex-wrap">
+                    @for (int j = i; j < i + 5 && j < trendingProducts.Count; j++)
+                    {
+                        var product = trendingProducts[j];
+                        <div class="trending-item card mb-3" style="width: 18%;">
+                            <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="@product.Name" />
+                            <div class="card-body text-center">
+                                <h6 class="card-title">@product.Name</h6>
+                                <p class="card-text">₹@product.Price</p>
+                                <a asp-controller="Form" asp-action="ProductDetails" asp-route-id="@product.Id" class="trending-btn">
+                                    View Details
+                                </a>
+
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+
+<!-- ================= HERO / FEATURE VIDEO ================= -->
+<div class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <video class="img-fluid rounded shadow-sm" style="max-height:400px; object-fit:cover;" autoplay muted loop playsinline>
+                <source src="/images/v2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="col-md-6">
+            <h1>Welcome to Our Furniture Store</h1>
+            <p class="text-muted">Discover our latest furniture designs with modern styles.</p>
+            <a asp-controller="Form" asp-action="NewAdditions" class="brown-btn">
+                Explore New Additions
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="container my-5">
+    <div class="row text-center cards-row">
+
+        <div class="col-md-3 mb-4">
+            <a asp-controller="Form" asp-action="ViewPage" asp-route-id="4" class="card-link">
+                <img src="/images/dei1.jpg" class="img-fluid rounded shadow card-img" />
+                <h5 class="mt-2 card-title">Delivery</h5>
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <a asp-controller="Form" asp-action="ViewPage" asp-route-id="5" class="card-link">
+                <img src="/images/rev3.jpg" class="img-fluid rounded shadow card-img" />
+                <h5 class="mt-2 card-title">Review</h5>
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <a asp-controller="Form" asp-action="ViewPage" asp-route-id="2" class="card-link">
+                <img src="/images/cn1.jpg" class="img-fluid rounded shadow card-img" />
+                <h5 class="mt-2 card-title">Contact</h5>
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <a asp-controller="Form" asp-action="ViewPage" asp-route-id="7" class="card-link">
+                <img src="/images/re2.jpg" class="img-fluid rounded shadow card-img" />
+                <h5 class="mt-2 card-title">ReturnExchange</h5>
+            </a>
+        </div>
+
+    </div>
+</div>
+<div class="container my-5" id="features">
+    <h1 class="title">Features</h1>
+    
+    <div class="row g-4">
+
+        <!-- Feature 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 text-center p-4 shadow-sm rounded">
+                <i class="bi bi-house-door-fill feature-icon mb-3"></i>
+                <h5 class="feature-title">Premium Wood Quality</h5>
+                <p class="feature-text">High-grade solid wood that ensures long-lasting durability and strength.</p>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 text-center p-4 shadow-sm rounded">
+                <i class="bi bi-palette-fill feature-icon mb-3"></i>
+                <h5 class="feature-title">Modern & Elegant Designs</h5>
+                <p class="feature-text">Stylish furniture designed to enhance your home décor beautifully.</p>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 text-center p-4 shadow-sm rounded">
+                <i class="bi bi-tools feature-icon mb-3"></i>
+                <h5 class="feature-title">Custom Made Furniture</h5>
+                <p class="feature-text">Get furniture custom-built exactly to your size, color, and design preferences.</p>
+            </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 text-center p-4 shadow-sm rounded">
+                <i class="bi bi-cash-stack feature-icon mb-3"></i>
+                <h5 class="feature-title">Affordable Pricing</h5>
+                <p class="feature-text">Premium furniture at the best competitive prices with guaranteed quality.</p>
+            </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 text-center p-4 shadow-sm rounded">
+                <i class="bi bi-recycle feature-icon mb-3"></i>
+                <h5 class="feature-title">Easy Return & Warranty</h5>
+                <p class="feature-text">Enjoy furniture with replacement guarantee and secure product warranty.</p>
+            </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 text-center p-4 shadow-sm rounded">
+                <i class="bi bi-truck feature-icon mb-3"></i>
+                <h5 class="feature-title">Fast & Safe Delivery</h5>
+                <p class="feature-text">Quick, safe, and scratch-free delivery of furniture to your doorstep.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<!-- ================= NEWSLETTER ================= -->
+
+    <div class="newsletter container my-5 text-center">
+    <h1 class="section-heading">Subscribe to Our Newsletter</h1>
+        <p>Get the latest updates, offers, and tips directly in your inbox.</p>
+        <form id="newsletterForm">
+            @Html.AntiForgeryToken()
+            <input type="email" id="email" placeholder="Enter your email" required />
+            <button type="submit">Subscribe</button>
+        </form>
+        <p id="msg" style="margin-top:10px;color:green;"></p>
+    </div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#newsletterForm').on('submit', function(e) {
+            e.preventDefault(); // prevent normal form submission
+
+            var email = $('#email').val().trim();
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            if(email === "") {
+                $('#msg').css('color', 'red').text("Email is required!");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("Subscribe", "Form")',
+                type: 'POST',
+                data: {
+                    email: email,
+                    __RequestVerificationToken: token
+                },
+                success: function(response) {
+                    if(response.success) {
+                        $('#msg').css('color', 'green').text(response.message);
+                        $('#email').val(''); // clear input
+                    } else {
+                        $('#msg').css('color', 'red').text("Something went wrong.");
+                    }
+                },
+                error: function(xhr) {
+                    $('#msg').css('color', 'red').text(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+@await Html.PartialAsync("_footer")
+
+
+    <style >
+    #homeCarousel {
+        margin-top: 0; /* optional: ensure no extra space */
+    }
+    /* Body background for furniture website */
+    /* Body background for furniture website */
+    body {
+        background: #F5E6D3; /* warm beige */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #4b3a2f; /* deep brown text for contrast */
+    }
+
+    /* Brown furniture style button */
+    .brown-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #8B5E3C, #D9A066); /* warm gradient */
+        color: #fff;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+        .brown-btn:hover {
+            background: linear-gradient(135deg, #D9A066, #8B5E3C);
+            color: #fff;
+        }
+
+    /* Section heading style */
+    .section-heading {
+        transition: all 0.4s ease;
+        text-align: center;
+        opacity: 0.85;
+        color: #8B5E3C;
+    }
+
+        .section-heading:hover {
+            color: #D9A066; /* golden highlight on hover */
+            opacity: 1;
+            text-shadow: 0px 0px 10px rgba(217,160,102,0.6);
+            cursor: pointer;
+        }
+
+    /* Desktop: 5 per row category grid */
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 35px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    /* CATEGORY CIRCLE */
+    .category-circle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+        .category-circle:hover {
+            transform: scale(1.05);
+        }
+
+    /* Category images as warm style circles */
+    .category-img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #D9A066; /* warm golden border */
+        box-shadow: 0 4px 12px rgba(139,94,60,0.3); /* soft shadow */
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+        .category-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(139,94,60,0.4);
+            border-color: #8B5E3C; /* darker brown on hover */
+        }
+
+    /* Category name */
+    .category-name {
+        margin-top: 12px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #4b3a2f; /* deep brown */
+    }
+
+
+    .cards-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap; /* 4 cards ek line me */
+        gap: 20px;
+    }
+
+        .cards-row > div {
+            width: 23%; /* 4 equal size columns */
+        }
+
+    .card-link {
+        text-decoration: none;
+        display: block;
+        transition: 0.3s;
+        text-align: center;
+    }
+
+    .card-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card-link:hover .card-img {
+        transform: scale(1.07);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .card-title {
+        font-weight: 600;
+        color: #333;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    .card-link:hover .card-title {
+        color: #007bff;
+        transform: translateY(-3px);
+    }
+    /* Welcome section heading */
+    .col-md-6 h1 {
+        font-size: 2.5rem; /* large, prominent text */
+        font-weight: 700; /* bold */
+        color: #8B5E3C; /* rich brown color */
+        line-height: 1.2;
+        margin-bottom: 20px;
+        transition: all 0.4s ease; /* smooth hover effect */
+    }
+
+        .col-md-6 h1:hover {
+            color: #D9A066; /* golden highlight on hover */
+            text-shadow: 0 0 10px rgba(217,160,102,0.5);
+            cursor: default;
+        }
+
+
+
+
+
+    /* Features section heading */
+    #features .title {
+        transition: all 0.4s ease;
+        text-align: center;
+        opacity: 0.85;
+        color: #D9A066; /* golden brown */
+        margin-bottom: 40px;
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+        #features .title:hover {
+            color: #FFD699; /* lighter golden on hover */
+            opacity: 1;
+            text-shadow: 0px 0px 10px rgba(217,160,102,0.6);
+            cursor: pointer;
+        }
+
+    #features {
+        padding: 60px 15px;
+        background-color: #5c3a21; /* dark brown background */
+        text-align: center;
+        opacity: 0.95;
+    }
+
+    .feature-card {
+        background: #8B5E3C; /* lighter brown card */
+        border-radius: 15px;
+        padding: 30px 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: default;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* shadow for hover */
+        }
+
+    .feature-icon {
+        font-size: 3rem;
+        color: #D9A066; /* golden brown */
+        margin-bottom: 20px;
+        transition: color 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        color: #FFD699; /* lighter golden on hover */
+    }
+
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #fff; /* white title for contrast */
+    }
+
+    .feature-text {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #f0e6dc; /* light cream text for readability */
+    }
+
+
+   
+   
+
+    /* ================= TRENDING PRODUCTS ================= */
+
+    .trending-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 14px;
+        background-color: #8B5E3C;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        flex: 1 1 18%; /* responsive flex */
+        margin: 0.5%;
+    }
+
+        .trending-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .trending-item img {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+            transition: transform 0.3s ease;
+        }
+
+        .trending-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ---------- CARD BODY ---------- */
+        .trending-item .card-body {
+            padding: 15px 10px;
+            text-align: center;
+            background-color: #8B5E3C;
+        }
+
+        /* ---------- TITLE ---------- */
+        .trending-item .card-title {
+            font-size: 1.2rem; /* slightly bigger */
+            font-weight: 700;
+            color: #FFD699;
+            margin-bottom: 8px;
+        }
+
+        /* ---------- PRICE ---------- */
+        .trending-item .card-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f5efe8;
+            margin-bottom: 12px;
+        }
+
+        /* ================= BUTTON (ANCHOR) ================= */
+        .trending-item .trending-btn {
+            display: inline-block;
+            width: 90%;
+            padding: 10px 15px; /* slightly bigger */
+            background: linear-gradient(135deg, #FFD699, #D9A066);
+            color: #5a3a1e;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+            .trending-item .trending-btn:hover {
+                background: linear-gradient(135deg, #ffe3b8, #e6b97c);
+                color: #3b2614;
+                transform: scale(1.08);
+                box-shadow: 0 8px 20px rgba(139,94,60,0.45);
+            }
+
+</style>

@@ -1,0 +1,123 @@
+﻿
+@await Html.PartialAsync("_header")
+@await Html.PartialAsync("_header")
+
+@model website.Models.Slider
+@{
+    ViewData["Title"] = "Add Slider";
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+
+<h2>Add Slider</h2>
+
+<form asp-action="AddSlider" method="post">
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label"></label>
+        <input asp-for="ImageUrl" class="form-control" placeholder="Enter Slider Image URL" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Add Slider</button>
+    <a asp-action="Sliders" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+@await Html.PartialAsync("_footer")
+<style>
+    body {
+        background: #F5E6D3; /* Soft beige / light wood */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #4b3a2f; /* deep brown text */
+    }
+/* ================= ADD SLIDER FORM ================= */
+form {
+    max-width: 600px;             /* form width */
+    margin: 50px auto;            /* center horizontally with top spacing */
+    padding: 30px;                /* internal spacing */
+    background-color: #8B5E3C;    /* lighter brown background like feature-card */
+    border-radius: 12px;          /* rounded corners */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15); /* soft shadow */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #f0e6dc;               /* light cream text */
+}
+
+/* Form Heading */
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #D9A066; /* golden brown heading */
+}
+
+/* Labels */
+form label {
+    font-weight: 500;
+    color: #FFD699; /* lighter golden */
+}
+
+/* Inputs */
+form input.form-control,
+form select.form-select,
+form textarea.form-control {
+    border-radius: 8px;
+    border: 1px solid #D9A066; /* golden brown border */
+    padding: 10px 12px;
+    background-color: #fff;     /* white input for readability */
+    color: #5c3a21;             /* dark brown text */
+    transition: border-color 0.3s, box-shadow 0.3s ease;
+}
+
+form input.form-control:focus,
+form select.form-select:focus,
+form textarea.form-control:focus {
+    border-color: #FFD699; /* lighter golden on focus */
+    box-shadow: 0 0 5px rgba(217,160,102,0.3);
+    outline: none;
+}
+
+/* Validation Errors */
+.text-danger {
+    font-size: 0.875rem;
+    margin-top: 3px;
+}
+
+/* Buttons */
+form .btn-primary {
+    background-color: #D9A066;  /* golden brown */
+    color: #5c3a21;             /* dark text */
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 15px;
+}
+
+form .btn-primary:hover {
+    background-color: #FFD699; /* lighter golden */
+    transform: translateY(-2px);
+}
+
+form .btn-secondary {
+    background-color: #5c3a21; /* dark brown */
+    color: #FFD699;            /* lighter golden text */
+    border-radius: 8px;
+    padding: 10px 18px;
+    margin-left: 10px;
+}
+
+form .btn-secondary:hover {
+    background-color: #3f2a18;
+    color: #FFD699;
+    transform: translateY(-2px);
+}
+
+
+</style>

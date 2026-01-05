@@ -1,0 +1,63 @@
+﻿
+@await Html.PartialAsync("_header")
+@model IEnumerable<website.Models.Order>
+@{
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+<h2>Orders</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Save</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.Id</td>
+                <td>@o.User.FirstName</td>
+                <td>@o.Product.Name</td>
+                <td>@o.Quantity</td>
+                <td>@o.TotalPrice</td>
+
+                <form asp-action="UpdateStatus" method="post">
+                    <input type="hidden" name="id" value="@o.Id" />
+
+                <td>
+                    <select name="status" class="form-select">
+                        <option value="Pending" selected="@("Pending".Equals(o.Status))">Pending</option>
+                        <option value="Processing" selected="@("Processing".Equals(o.Status))">Processing</option>
+                        <option value="Shipped" selected="@("Shipped".Equals(o.Status))">Shipped</option>
+                        <option value="Completed" selected="@("Completed".Equals(o.Status))">Completed</option>
+                        <option value="Cancelled" selected="@("Cancelled".Equals(o.Status))">Cancelled</option>
+                    </select>
+
+                </td>
+
+                <td>
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                </td>
+                </form>
+
+                <td>
+                    <a asp-action="DeleteOrder" asp-route-id="@o.Id"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Delete order?')">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Html.PartialAsync("_footer")

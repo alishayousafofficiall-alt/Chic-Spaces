@@ -1,0 +1,152 @@
+﻿@model IEnumerable<website.Models.Order>
+@await Html.PartialAsync("_header")
+
+@{
+    ViewBag.Title = "My Orders";
+}
+
+<h2>My Orders</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have no orders yet.</div>
+}
+else
+{
+    <div class="orders-table-wrapper">
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Order Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 1;
+                }
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@count</td>
+                        <td>@order.Product.Name</td>
+                        <td>@order.Quantity</td>
+                        <td>@order.TotalPrice.ToString("C")</td>
+                        <td>@order.OrderDate.ToString("dd MMM yyyy")</td>
+                        <td>@order.Status</td>
+                    </tr>
+                    count++;
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@await Html.PartialAsync("_footer")
+
+<style>
+/* ================= PAGE & BODY ================= */
+body {
+    background: linear-gradient(135deg, #f4e1d2, #d9bfa1, #e9d4bc);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #4b3a2f;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: #D9A066; /* golden brown heading */
+}
+
+/* Alert Info */
+.alert-info {
+    text-align: center;
+    border-radius: 8px;
+    background-color: #8B5E3C; /* lighter brown */
+    color: #f0e6dc; /* cream text */
+    padding: 12px 20px;
+    margin-bottom: 20px;
+}
+
+/* ================= ORDERS TABLE ================= */
+.orders-table-wrapper {
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 0 15px;
+}
+
+/* Table */
+.orders-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.orders-table thead {
+    background: linear-gradient(135deg, #8B5E3C, #5c3a21);
+    color: #FFD699;
+}
+
+.orders-table thead th {
+    padding: 14px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Body Rows */
+.orders-table tbody tr {
+    background-color: #f7f3ee;   /* light cream */
+    color: #4b3a2f;
+    transition: all 0.25s ease;
+}
+
+.orders-table tbody tr:nth-child(even) {
+    background-color: #efe6dc;  /* soft alternate */
+}
+
+/* Hover */
+.orders-table tbody tr:hover {
+    background-color: #D9A066;  /* golden hover */
+    color: #3b2614;
+}
+
+/* Cells */
+.orders-table tbody td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #e1d3c2;
+}
+
+/* Last row border fix */
+.orders-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Optional: Status colors */
+.orders-table tbody td:last-child {
+    font-weight: 600;
+}
+.orders-table tbody td:last-child:contains("Completed") {
+    color: #2e7d32; /* green for completed */
+}
+.orders-table tbody td:last-child:contains("Pending") {
+    color: #f57c00; /* orange for pending */
+}
+.orders-table tbody td:last-child:contains("Cancelled") {
+    color: #c62828; /* red for cancelled */
+}
+</style>

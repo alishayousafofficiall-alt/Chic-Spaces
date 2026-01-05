@@ -1,0 +1,39 @@
+﻿
+@await Html.PartialAsync("_header")
+@model List<website.Models.Slider>
+@{
+    var pages = ViewBag.Pages as List<website.Models.PageContent> ?? new List<website.Models.PageContent>();
+}
+<h2>Manage Sliders</h2>
+<a class="btn btn-success" asp-action="AddSlider">
+    <i class="bi bi-plus-lg"></i> Add New Item
+</a>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var slider in Model)
+        {
+            <tr>
+                <td>@slider.Id</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(slider.ImageUrl))
+                    {
+                        <img src="@Url.Content(slider.ImageUrl)" style="width:120px;" />
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="EditSlider" asp-route-id="@slider.Id">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="DeleteSlider" asp-route-id="@slider.Id"
+                       onclick="return confirm('Are you sure to delete this slider?');">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Html.PartialAsync("_footer")

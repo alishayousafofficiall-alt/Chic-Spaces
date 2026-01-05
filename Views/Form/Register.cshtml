@@ -1,0 +1,152 @@
+﻿@model website.Models.Users
+<div class="register-wrapper">
+    <div class="register-card">
+        <div class="left-panel">
+            <img src="~/images/reg2.jpg" alt="Register Image">
+        </div>
+        <div class="right-panel">
+            <h1 class="title">Register</h1>
+            <form asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+                <input asp-for="FirstName" placeholder="First Name">
+                <span asp-validation-for="FirstName"></span>
+
+                <input asp-for="LastName" placeholder="Last Name">
+                <span asp-validation-for="LastName"></span>
+
+                <input asp-for="Age" type="number" placeholder="Age">
+                <span asp-validation-for="Age"></span>
+
+                <input asp-for="DateOfBirth" type="date">
+                <span asp-validation-for="DateOfBirth"></span>
+
+                <select asp-for="Gender">
+                    <option value="">Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+                <span asp-validation-for="Gender"></span>
+
+                <input asp-for="Email" placeholder="Email">
+                <span asp-validation-for="Email"></span>
+
+                <button type="submit">NEXT</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ================= GLOBAL STYLES ================= */
+    body {
+        background: linear-gradient(135deg, #f4e1d2, #d9bfa1); /* warm furniture-style gradient */
+        margin: 0;
+        padding: 0;
+        background: #f5f5f5;
+    }
+
+    .register-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        background: linear-gradient(135deg, #f4e1d2, #d9bfa1); /* same warm gradient as login */
+        box-sizing: border-box;
+    }
+
+    /* ================= REGISTER CARD ================= */
+    .register-card {
+        display: flex;
+        flex-direction: row;
+        background: #fff5e6; /* light warm background */
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        overflow: hidden;
+        max-width: 900px;
+        width: 100%;
+    }
+
+    /* LEFT PANEL IMAGE FULL */
+    .left-panel {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+        .left-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* image poori panel me stretch ho jaye, aspect ratio maintain */
+        }
+
+
+    /* RIGHT PANEL FORM */
+    .right-panel {
+        flex: 1;
+        padding: 40px 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .right-panel .title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #8B5E3C; /* warm brown title matching login */
+        }
+
+        /* FORM FIELDS */
+        .right-panel form input,
+        .right-panel form select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #c28f6e; /* warm reddish-brown border */
+            font-size: 16px;
+            box-sizing: border-box;
+            background: #fff2e6; /* warm light background */
+            color: #333;
+        }
+
+            .right-panel form input:focus,
+            .right-panel form select:focus {
+                outline: none;
+                border-color: #8B5E3C; /* warm brown focus */
+                box-shadow: 0 0 5px rgba(139, 94, 60, 0.5);
+            }
+
+    /* ERROR SPAN */
+    span[asp-validation-for] {
+        color: #b33c00; /* warm red */
+        font-size: 14px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    /* SUBMIT BUTTON */
+    .right-panel form button {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #8B5E3C, #D9A066); /* furniture style gradient */
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .right-panel form button:hover {
+            background: linear-gradient(135deg, #D9A066, #8B5E3C);
+        }
+ 
+</style>
+
+
